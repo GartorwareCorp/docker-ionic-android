@@ -16,6 +16,7 @@ ARG ANDROID_SDK_URL="https://dl.google.com/android/repository/sdk-tools-linux-${
 ARG GRADLE_URL="https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip"
 
 ENV ANDROID_HOME "${ANDROID_HOME}"
+ENV ANDROID_BUILD_TOOLS_VERSION "${ANDROID_BUILD_TOOLS_VERSION}"
 ENV GRADLE_HOME "${GRADLE_HOME}"
 ENV PATH "${PATH}:${GRADLE_HOME}/bin"
 
