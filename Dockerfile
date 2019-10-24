@@ -16,9 +16,9 @@ ARG GRADLE_URL="https://services.gradle.org/distributions/gradle-${GRADLE_VERSIO
 ENV ANDROID_SDK_ROOT "/opt/android-sdk"
 ENV ANDROID_HOME "${ANDROID_SDK_ROOT}"
 ENV BUILD_TOOLS_ROOT "${ANDROID_SDK_ROOT}/build-tools/${ANDROID_BUILD_TOOLS_VERSION}"
-ENV GRADLE_ROOT "/opt/gradle/gradle-${GRADLE_VERSION}"
+ENV GRADLE_HOME "/opt/gradle/gradle-${GRADLE_VERSION}"
 
-ENV PATH "${PATH}:${BUILD_TOOLS_ROOT}:${GRADLE_ROOT}/bin"
+ENV PATH "${PATH}:${BUILD_TOOLS_ROOT}:${GRADLE_HOME}/bin"
 
 RUN mkdir -p /opt && cd /tmp \
     # 1) Install system package dependencies
@@ -44,9 +44,9 @@ RUN mkdir -p /opt && cd /tmp \
     && $ANDROID_SDK_ROOT/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
     # 4) Install gradle
     && curl -fSLk ${GRADLE_URL} -o gradle-${GRADLE_VERSION}-bin.zip \
-    && mkdir -p ${GRADLE_ROOT} \
+    && mkdir -p ${GRADLE_HOME} \
     && unzip gradle-${GRADLE_VERSION}-bin.zip \
-    && mv gradle-${GRADLE_VERSION}/* ${GRADLE_ROOT} \
+    && mv gradle-${GRADLE_VERSION}/* ${GRADLE_HOME} \
     # 5) Cleanup
     && apt-get autoremove -y \
     && apt-get clean \
