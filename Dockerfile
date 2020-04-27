@@ -20,7 +20,7 @@ ENV BUILD_TOOLS_ROOT "${ANDROID_SDK_ROOT}/build-tools/${ANDROID_BUILD_TOOLS_VERS
 ENV GRADLE_HOME "/opt/gradle/gradle-${GRADLE_VERSION}"
 ENV NODE_ROOT "/opt/node"
 
-ENV PATH "${PATH}:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${BUILD_TOOLS_ROOT}:${GRADLE_HOME}/bin"
+ENV PATH "${PATH}:${NODE_ROOT}/bin:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${BUILD_TOOLS_ROOT}:${GRADLE_HOME}/bin"
 
 RUN mkdir -p /opt && cd /tmp \
     # 1) Install system package dependencies
