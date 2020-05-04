@@ -7,6 +7,7 @@ ARG IONIC_VERSION="6.6.0"
 ARG CORDOVA_VERSION="9.0.0"
 ARG ANDROID_SDK_VERSION="6200805_latest"
 ARG ANDROID_BUILD_TOOLS_VERSION="29.0.3"
+ARG ANDROID_VERSION=29
 ARG GRADLE_VERSION="6.3"
 
 ARG NODEJS_URL="https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz"
@@ -46,8 +47,13 @@ RUN mkdir -p /opt && cd /tmp \
     && mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools \
     && unzip -d ${ANDROID_SDK_ROOT}/cmdline-tools commandlinetools-linux-${ANDROID_SDK_VERSION}.zip \
     && (while sleep 3; do echo "y"; done) | $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager --licenses \
+    && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager --update \
+    && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager "tools" \
     && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager "platform-tools" \
     && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
+    && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager "platforms;android-${ANDROID_VERSION}" \
+    && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager "patcher;v4" \
+    && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager "emulator" \
     # 4) Install gradle
     && curl -fSLk ${GRADLE_URL} -o gradle-${GRADLE_VERSION}-bin.zip \
     && mkdir -p ${GRADLE_HOME} \
