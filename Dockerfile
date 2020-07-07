@@ -19,8 +19,9 @@ ENV ANDROID_SDK_ROOT "/opt/android-sdk"
 ENV ANDROID_HOME "${ANDROID_SDK_ROOT}"
 ENV BUILD_TOOLS_ROOT "${ANDROID_SDK_ROOT}/build-tools/${ANDROID_BUILD_TOOLS_VERSION}"
 ENV GRADLE_HOME "/opt/gradle/gradle-${GRADLE_VERSION}"
-ENV GRADLE_USER_HOME "${HOME}/.gradle"
+ENV GRADLE_USER_HOME "/root/.gradle"
 ENV NODE_ROOT "/opt/node"
+ENV VOLUME_CACHE "/root/volume_cache"
 
 ENV PATH "${PATH}:${NODE_ROOT}/bin:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${BUILD_TOOLS_ROOT}:${GRADLE_HOME}/bin"
 
@@ -63,9 +64,9 @@ RUN mkdir -p /opt && cd /tmp \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     # 6) Add and set user for use by ionic and set work folder
-    && mkdir /app
+    && mkdir /app \
+    && mkdir -p $VOLUME_CACHE 
 
-VOLUME $GRADLE_USER_HOME/caches
-VOLUME $GRADLE_USER_HOME/wrapper
+VOLUME $VOLUME_CACHE
 
 WORKDIR /app
