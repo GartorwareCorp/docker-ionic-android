@@ -2,13 +2,13 @@ FROM ubuntu:20.04
 
 LABEL MAINTAINER="Gartorware <gartorware@gmail.com>"
 
-ARG NODEJS_VERSION="12.16.2"
-ARG IONIC_VERSION="6.6.0"
+ARG NODEJS_VERSION="12.18.2"
+ARG IONIC_VERSION="6.10.1"
 ARG CORDOVA_VERSION="9.0.0"
-ARG ANDROID_SDK_VERSION="6200805_latest"
+ARG ANDROID_SDK_VERSION="6609375_latest"
 ARG ANDROID_BUILD_TOOLS_VERSION="29.0.3"
-ARG ANDROID_VERSION=29
-ARG GRADLE_VERSION="6.3"
+ARG ANDROID_API_VERSION=29
+ARG GRADLE_VERSION="6.5"
 
 ARG NODEJS_URL="https://nodejs.org/dist/v${NODEJS_VERSION}/node-v${NODEJS_VERSION}-linux-x64.tar.xz"
 ARG ANDROID_SDK_URL="https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_VERSION}.zip"
@@ -19,6 +19,7 @@ ENV ANDROID_SDK_ROOT "/opt/android-sdk"
 ENV ANDROID_HOME "${ANDROID_SDK_ROOT}"
 ENV BUILD_TOOLS_ROOT "${ANDROID_SDK_ROOT}/build-tools/${ANDROID_BUILD_TOOLS_VERSION}"
 ENV GRADLE_HOME "/opt/gradle/gradle-${GRADLE_VERSION}"
+ENV GRADLE_USER_HOME "${HOME}/.gradle"
 ENV NODE_ROOT "/opt/node"
 
 ENV PATH "${PATH}:${NODE_ROOT}/bin:${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${BUILD_TOOLS_ROOT}:${GRADLE_HOME}/bin"
@@ -51,9 +52,7 @@ RUN mkdir -p /opt && cd /tmp \
     && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager "tools" \
     && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager "platform-tools" \
     && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
-    && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager "platforms;android-${ANDROID_VERSION}" \
-    && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager "patcher;v4" \
-    && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager "emulator" \
+    && $ANDROID_SDK_ROOT/cmdline-tools/tools/bin/sdkmanager "platforms;android-${ANDROID_API_VERSION}" \
     # 4) Install gradle
     && curl -fSLk ${GRADLE_URL} -o gradle-${GRADLE_VERSION}-bin.zip \
     && mkdir -p ${GRADLE_HOME} \
@@ -65,5 +64,8 @@ RUN mkdir -p /opt && cd /tmp \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     # 6) Add and set user for use by ionic and set work folder
     && mkdir /app
+
+VOLUME $GRADLE_USER_HOME/caches
+VOLUME $GRADLE_USER_HOME/wrapper
 
 WORKDIR /app
